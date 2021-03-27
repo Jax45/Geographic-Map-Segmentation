@@ -17,20 +17,20 @@ Description: This program is made to segment out a specific state from the FullC
   spot as the original state was in the input image. Note: If the resized state will go out of bounds of the input image it will be pushed away
   from the edge and a console message will detail that.
  
- Example of clicking Missouri:
+ # Example of clicking Missouri:
  
 ![Missouri ROI](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MissouriROI.png?raw=true)
 
 ![Missouri Expanded](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MissouriImgOut.png?raw=true)
 
-Example of clicking Michigan:
+# Example of clicking Michigan:
 
 ![Michigan ROI](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MichiganROI.png?raw=true)
 
 ![Michigan Expanded](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MichiganImgOut.png?raw=true)
 
 
-Known bugs:
+# Known bugs:
 When clicking a state near an edge of the screen the roi will increase until it hits that edge of the screen and then stop prematurely.
 
 sometimes if you click a state like michigan too close to another state of the same color, it will increase the roi until it also hits the other state.
