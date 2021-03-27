@@ -35,3 +35,13 @@ When clicking a state near an edge of the screen the roi will increase until it 
 
 sometimes if you click a state like michigan too close to another state of the same color, it will increase the roi until it also hits the other state.
  this is needed though to pick up possible islands or disconnected parts of the state. it can possibly be refined to stop at a certain distance from the central region.
+
+# Usage:
+
+map_segment.exe [params] input_image
+
+        -?, -h, --help, --usage
+                print this message
+
+        input_image (value:FullColorUSA.0.5.png)
+                Name of file containing image
