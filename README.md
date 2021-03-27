@@ -16,6 +16,15 @@ Description: This program is made to segment out a specific state from the FullC
   of expanding ROI contains no new pixels that are not black. That ROI is then doubled in pixels and superimposed on top of the same
   spot as the original state was in the input image. Note: If the resized state will go out of bounds of the input image it will be pushed away
   from the edge and a console message will detail that.
+ 
+ Example of clicking Missouri:
+![Missouri ROI](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/image.jpg?raw=true)
+![Missouri Expanded](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
+Example of clicking Michigan:
+![Michigan ROI](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![Michigan Expanded](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
 
 Known bugs:
 When clicking a state near an edge of the screen the roi will increase until it hits that edge of the screen and then stop prematurely.
