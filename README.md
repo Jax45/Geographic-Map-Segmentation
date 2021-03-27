@@ -18,12 +18,16 @@ Description: This program is made to segment out a specific state from the FullC
   from the edge and a console message will detail that.
  
  Example of clicking Missouri:
-![Missouri ROI](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/image.jpg?raw=true)
-![Missouri Expanded](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+ 
+![Missouri ROI](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MissouriROI.png?raw=true)
+
+![Missouri Expanded](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MissouriImgOut.png?raw=true)
 
 Example of clicking Michigan:
-![Michigan ROI](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
-![Michigan Expanded](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+
+![Michigan ROI](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MichiganROI.png?raw=true)
+
+![Michigan Expanded](https://github.com/Jax45/Geographic-Map-Segmentation/blob/master/Geographic%20Map%20Segmentation/MichiganImgOut.png?raw=true)
 
 
 Known bugs:
