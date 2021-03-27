@@ -29,5 +29,17 @@
     <Image Include="FullColorUSA.0.5.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="MissouriImgOut.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="MissouriROI.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="MichiganImgOut.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="MichiganROI.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

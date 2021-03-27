@@ -153,6 +153,10 @@
     <Image Include="FullColorUSA.0.5.png" />
     <Image Include="FullColorUSA.0.75.png" />
     <Image Include="FullColorUSA.png" />
+    <Image Include="MichiganImgOut.png" />
+    <Image Include="MichiganROI.png" />
+    <Image Include="MissouriImgOut.png" />
+    <Image Include="MissouriROI.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
