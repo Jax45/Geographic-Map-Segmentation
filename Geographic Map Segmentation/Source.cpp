@@ -42,9 +42,13 @@ int main(int argc, const char** argv)
 {
 	const cv::String keys =
 		"{help h usage ?  |                   | print this message }"
+		"{k kmeans        |       true        | Use K-Means Clustering Boolean [Default: true] }"
+		"{n numclusters   |       49          | The number of clustering regions in the K-means algorithm. }"
 		"{@input_image    |                   | Name of file containing image}";
 	cv::CommandLineParser parser(argc, argv, keys);
 	parser.about("Application name v1.0.0");
+	//int K = 49;
+
 	if (parser.has("help"))
 	{
 		parser.printMessage();
@@ -57,6 +61,8 @@ int main(int argc, const char** argv)
 		return 0;
 	}
 	//get the args
+	bool kmeans = parser.get<bool>("k");
+	int K = parser.get<int>("n");
 	cv::String inputFile = parser.get<cv::String>("@input_image");
 	try
 	{
@@ -69,8 +75,84 @@ int main(int argc, const char** argv)
 		cv::resize(imgOut, imgOut, cv::Size(), 0.5, 0.5);
 		cv::imwrite("FullColorUSA.0.5.png", imgOut);*/
 
+
+		//If using k-means, cluster the image first and get the possible regions.
+		cv::Mat ocv;
+		cv::Mat data;
+		//cv::Mat data2;
+		std::vector<cv::Mat> clusterImages;
+		cv::Mat labels, centers;
+		if(kmeans){
+			
+			imgIn.copyTo(ocv);
+
+			// convert to float & reshape to a [3 x W*H] Mat 
+			//  (so every pixel is on a row of it's own)
+			ocv.convertTo(data, CV_32F);
+			data = data.reshape(1, data.total());
+
+			// do kmeans
+			
+			cv::kmeans(data, K, labels, cv::TermCriteria(cv::TermCriteria::COUNT, 10, 1.0), 3,
+				cv::KMEANS_PP_CENTERS, centers);
+
+			// reshape both to a single row of Vec3f pixels:
+			centers = centers.reshape(3, centers.rows);
+			data = data.reshape(3, data.rows);
+
+			for (int j = 0; j < K; j++) {
+				cv::Mat data2 = data.clone();
+				//get vector of clusters
+				cv::Vec3f* ptr = data2.ptr<cv::Vec3f>();
+				for (size_t i = 0; i < data2.rows; i++) {
+					int center_id = labels.at<int>(i);
+					if (center_id == j) {
+						ptr[i] = centers.at<cv::Vec3f>(center_id);
+					}
+					else {
+						ptr[i] = centers.at<cv::Vec3f>(0);
+					}
+				}
+				cv::Mat o = ocv.clone();
+				cv::Mat data3 = data2.clone();
+				//data2.copyTo(data3);
+				//ocv.copyTo(o);
+				o = data3.reshape(3, o.rows);
+				o.convertTo(o, CV_8U);
+				clusterImages.push_back(o);
+			}
+
+
+			
+
+			// replace pixel values with their center value:
+			cv::Vec3f* p = data.ptr<cv::Vec3f>();
+			for (size_t i = 0; i < data.rows; i++) {
+				int center_id = labels.at<int>(i);
+				p[i] = centers.at<cv::Vec3f>(center_id);
+			}
+
+			//back to 2d and uchar for cluster images
+			/*for (int i = 0; i < clusterImages.size(); i++) {
+				clusterImages[i] = clusterImages[i].reshape(3, ocv.rows);
+				clusterImages[i].convertTo(clusterImages[i], CV_8U);
+			}*/
+
+			// back to 2d, and uchar:
+			ocv = data.reshape(3, ocv.rows);
+			ocv.convertTo(ocv, CV_8U);
+			//end kmeans
+		}
+
+		for (int i = 0; i < clusterImages.size(); i++) {
+			cv::imshow("Cluster", clusterImages[i]);
+			cv::waitKey();
+		}
+		cv::Mat test = clusterImages[1].clone();
+		//cv::imshow("data2", ocv);
 		/*3.a Display the image and receive the input(left mouse button click) from the user.*/
 		cv::namedWindow("input image", 1);
+
 		cv::setMouseCallback("input image", getStateZoom, NULL);
 		cv::imshow("input image", imgIn);
 		while (userPt.x < 0 && userPt.y < 0) {
@@ -78,19 +160,31 @@ int main(int argc, const char** argv)
 		}
 		//we now have our point.
 		/*3.b Extract the state selected*/
-
-		//threshold image to color given
 		cv::Mat imgInCpy;
-		imgIn.copyTo(imgInCpy);
+		cv::Vec3b color;
+		if (!kmeans) {
+			//threshold image to color given
+			imgIn.copyTo(imgInCpy);
 
-		//get color of state
-		cv::Vec3b color = imgIn.at<cv::Vec3b>(userPt.y, userPt.x);
+			//get color of state
+			color = imgIn.at<cv::Vec3b>(userPt.y, userPt.x);
 
-		//remove all other colors
-		for (int i = 0; i < imgInCpy.rows; i++) {
-			for (int j = 0; j < imgInCpy.cols; j++) {
-				if (imgInCpy.at<cv::Vec3b>(i, j) != color) {
-					imgInCpy.at<cv::Vec3b>(i, j) = cv::Vec3b(0, 0, 0);
+			//remove all other colors
+			for (int i = 0; i < imgInCpy.rows; i++) {
+				for (int j = 0; j < imgInCpy.cols; j++) {
+					if (imgInCpy.at<cv::Vec3b>(i, j) != color) {
+						imgInCpy.at<cv::Vec3b>(i, j) = cv::Vec3b(0, 0, 0);
+					}
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < clusterImages.size(); i++) {
+				if (clusterImages[i].at<cv::Vec3b>(userPt.y, userPt.x) != cv::Vec3b(0,0,0)) {
+					//this is the correct cluster image
+					imgInCpy = clusterImages[i].clone();
+					color = clusterImages[i].at<cv::Vec3b>(userPt.y, userPt.x);
+					break;
 				}
 			}
 		}
@@ -273,13 +367,13 @@ int main(int argc, const char** argv)
 		/*4. Terminate the program when the user hits the character q*/
 
 
-		cv::Mat imgOut;
+		/*cv::Mat imgOut;
 		state.copyTo(imgOut);
 		cv::resize(imgOut, imgOut, cv::Size(), 0.5, 0.5);
 		cv::imwrite("MichiganROI.png", imgOut);
 		imgIn.copyTo(imgOut);
 		cv::resize(imgOut, imgOut, cv::Size(), 0.5, 0.5);
-		cv::imwrite("MichiganImgOut.png", imgOut);
+		cv::imwrite("MichiganImgOut.png", imgOut);*/
 
 		while(cv::waitKey() != 'q');
 
