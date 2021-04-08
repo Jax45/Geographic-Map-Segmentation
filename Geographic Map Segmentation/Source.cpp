@@ -16,12 +16,20 @@
 //  spot as the original state was in the input image. Note: If the resized state will go out of bounds of the input image it will be pushed away
 //  from the edge and a console message will detail that.
 //
-//Known bugs:
+//	UPDATE: Added the k-means algorithm as an option that will then instead of removing all other state colors will find the segmented regions
+//			in a vector of images and then the program works the same as before by picking the closed region the user chose and ignoring
+//			the other states of the same color. This does not work nearly as well as the other method because of the alpha channel in the
+//			borders of the states.
+
+//Known bugs for non-k-means:
 //When clicking a state near an edge of the screen the roi will increase until it hits that edge of the screen and then stop prematurely.
 //
 //sometimes if you click a state like michigan too close to another state of the same color, it will increase the roi until it also hits the other state.
 // this is needed though to pick up possible islands or disconnected parts of the state. it can possibly be refined to stop at a certain distance from the central region.
 
+//Known bugs for k-means:
+// states have extra regions in their cluster that are close to the same color because of the messed up alpha channel in the image when read
+// as BGR.
 
 cv::Point userPt = cv::Point(-5, -5);
 cv::Mat imgIn;
